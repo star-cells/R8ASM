@@ -8,7 +8,11 @@
 #include <variant>
 #include <vector>
 
-#define ROT8_BC_TO_CHAR(bc) ("><+-[].,"[static_cast<int>(bc)])
+typedef uint32_t r8asm_label;
+typedef uint32_t r8asm_data;
+typedef uint32_t unit_size_type;
+
+#define ROT8_BC_TO_CHAR(bc) ("><+-[].,"[static_cast<uint8_t>(bc)])
 
 enum class rot8_bytecode { STP, BTP, ROR, FLB, BIZ, RNZ, OUT, INP };
 enum class r8asm_macro {
@@ -18,7 +22,7 @@ enum class r8asm_macro {
     XOR,
 };
 
-using R8Operand = std::variant<std::monostate, int, std::string>;
+using R8Operand = std::variant<std::monostate, r8asm_data, std::string>;
 using R8MetaOp = std::variant<r8asm_macro, rot8_bytecode>;
 
 struct R8Instruction {
@@ -33,11 +37,13 @@ class R8Macro {
 
 std::vector<rot8_bytecode> r8asm_tape_out(std::span<const R8Instruction> ops);
 
-extern std::map<std::string, int> labels;
-extern std::map<std::string, int> datas;
+extern std::map<std::string, r8asm_label> labels;
+extern std::map<std::string, r8asm_data> datas;
 extern std::map<std::string, std::vector<R8Macro>> macros;
 
-extern uint8_t UNIT_SIZE;
-#define UNIT_MAX ((1 << UNIT_SIZE) - 1)
+extern unit_size_type UNIT_SIZE;
+// #define DEFAULT_UNIT_SIZE (sizeof(unit_size_type) * 8)
+#define DEFAULT_UNIT_SIZE 17  // Just for test.
+#define UNIT_MAX (((uint64_t)1 << UNIT_SIZE) - 1)
 
 #endif
