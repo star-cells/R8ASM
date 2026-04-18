@@ -11,14 +11,11 @@ section .text
 
 %macro erase 1
     .tp %1
-    stp
-    .xor UNIT_MAX
-    btp
-    .loop
+    .loop UNIT_MAX
         biz
             flb
-            ror
         rnz
+        ror
     .endloop
 %endmacro
 

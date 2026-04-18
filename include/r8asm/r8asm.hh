@@ -8,7 +8,7 @@
 #include <variant>
 #include <vector>
 
-#define ROT8_BC_TO_CHAR(bc) "><+-[].,"[static_cast<int>(bc)]
+#define ROT8_BC_TO_CHAR(bc) ("><+-[].,"[static_cast<int>(bc)])
 
 enum class rot8_bytecode { STP, BTP, ROR, FLB, BIZ, RNZ, OUT, INP };
 enum class r8asm_macro {
@@ -38,5 +38,6 @@ extern std::map<std::string, int> datas;
 extern std::map<std::string, std::vector<R8Macro>> macros;
 
 extern uint8_t UNIT_SIZE;
+#define UNIT_MAX ((1 << UNIT_SIZE) - 1)
 
 #endif
