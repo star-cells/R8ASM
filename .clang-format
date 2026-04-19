@@ -1,4 +1,4 @@
-BasedOnStyle: Google
+BasedOnStyle: Webkit
 IndentWidth: 4
 UseTab: Always
 PointerAlignment: Right
