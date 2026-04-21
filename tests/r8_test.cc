@@ -1,14 +1,19 @@
 #include <iostream>
 
 #include "r8asm/r8asm.hh"
+#include "r8asm/r8asm_core.hh"
 
 int main()
 {
     std::vector<R8Instruction> ins = {
-	{ rot8_bytecode::INP }, { r8asm_macro::LOOP },
-	{ rot8_bytecode::BIZ }, { rot8_bytecode::FLB },
-	{ rot8_bytecode::RNZ }, { rot8_bytecode::ROR },
-	{ r8asm_macro::ENDLOOP }, { rot8_bytecode::OUT }
+	R8Instruction { rot8_bytecode::INP }, // To make clang-format distribute all
+	// instructions into diffirent lines.
+	{ r8asm_builtin::LOOP },
+	{ rot8_bytecode::BIZ },
+	{ rot8_bytecode::FLB },
+	{ rot8_bytecode::RNZ },
+	{ rot8_bytecode::ROR },
+	{ r8asm_builtin::ENDLOOP },
     };
     std::vector<rot8_bytecode> tape = r8asm_tape_out(ins);
 
