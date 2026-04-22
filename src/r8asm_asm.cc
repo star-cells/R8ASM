@@ -5,7 +5,8 @@
 #include <variant>
 #include <vector>
 
-r8asm_data read_opr(R8Operand arg, r8asm_data default_opr = 0) // Attention,default_opr is 0
+r8asm_data read_opr(R8Operand arg,
+		    r8asm_data default_opr = 0) // Attention,default_opr is 0
 {
     if (const std::string *operand = std::get_if<std::string>(&arg)) {
 	if ((*operand) == "$")
@@ -16,8 +17,7 @@ r8asm_data read_opr(R8Operand arg, r8asm_data default_opr = 0) // Attention,defa
     return (default_opr);
 }
 
-void expand_xor(std::vector<rot8_bytecode> &tape, R8Operand arg)
-{
+void expand_xor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     r8asm_data opr = read_opr(arg);
 
     for (unit_size_type i = 0; i < UNIT_SIZE; i++) {
@@ -28,26 +28,22 @@ void expand_xor(std::vector<rot8_bytecode> &tape, R8Operand arg)
     }
 }
 
-void expand_loop(std::vector<rot8_bytecode> &tape, R8Operand arg)
-{
-    r8asm_data opr = read_opr(arg, UNIT_MAX);
+void expand_loop(std::vector<rot8_bytecode> &tape, R8Operand arg) {
+    std::vector<rot8_bytecode> tmp = {rot8_bytecode::STP, rot8_bytecode::BIZ,
+				      rot8_bytecode::BTP}; // >[<
 
-    tape.push_back(rot8_bytecode::STP);
-    expand_xor(tape, opr);
-    tape.push_back(rot8_bytecode::BIZ);
-    tape.push_back(rot8_bytecode::BTP); // >(xor)[<
-}
-
-void expand_endloop(std::vector<rot8_bytecode> &tape, R8Operand arg)
-{
-    std::vector<rot8_bytecode> tmp = { rot8_bytecode::STP, rot8_bytecode::FLB,
-	rot8_bytecode::ROR, rot8_bytecode::RNZ,
-	rot8_bytecode::BTP }; // >-+]<
     tape.insert(tape.end(), tmp.begin(), tmp.end());
 }
 
-void expand_tp(std::vector<rot8_bytecode> &tape, R8Operand arg, bool count_offset = true)
-{
+void expand_endloop(std::vector<rot8_bytecode> &tape, R8Operand arg) {
+    std::vector<rot8_bytecode> tmp = {rot8_bytecode::STP, rot8_bytecode::FLB,
+				      rot8_bytecode::ROR, rot8_bytecode::RNZ,
+				      rot8_bytecode::BTP}; // >-+]<
+    tape.insert(tape.end(), tmp.begin(), tmp.end());
+}
+
+void expand_tp(std::vector<rot8_bytecode> &tape, R8Operand arg,
+	       bool count_offset = true) {
     r8asm_data opr = read_opr(arg);
 
     unit_offset_type offset = (unit_offset_type)opr - (unit_offset_type)dataptr;
@@ -60,16 +56,24 @@ void expand_tp(std::vector<rot8_bytecode> &tape, R8Operand arg, bool count_offse
 	dataptr = opr;
 }
 
-void expand_anchor(std::vector<rot8_bytecode> &tape, R8Operand arg)
-{
+void expand_anchor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     if (const std::string *name = std::get_if<std::string>(&arg))
-	datas.insert({ *name, dataptr });
+	datas.insert({*name, dataptr});
     else if (const r8asm_data *name = std::get_if<r8asm_data>(&arg))
-	datas.insert({ std::to_string(*name), dataptr });
+	datas.insert({std::to_string(*name), dataptr});
 }
 
-void expand_bytecode(std::vector<rot8_bytecode> &tape, R8Operand arg, rot8_bytecode op, bool count_offset = true)
-{
+void expand_erase(std::vector<rot8_bytecode> &tape, R8Operand arg) {
+    std::vector<rot8_bytecode> tmp = {rot8_bytecode::BIZ, rot8_bytecode::FLB,
+				      rot8_bytecode::ROR,
+				      rot8_bytecode::RNZ}; // [-+]
+    for (unit_size_type i = 0; i < UNIT_SIZE; i++)
+	tape.insert(tape.end(), tmp.begin(), tmp.end());
+    return;
+}
+
+void expand_bytecode(std::vector<rot8_bytecode> &tape, R8Operand arg,
+		     rot8_bytecode op, bool count_offset = true) {
     r8asm_data repeat = read_opr(arg, 1);
     for (r8asm_data i = 0; i < repeat; i++) {
 	tape.push_back(op);
@@ -82,13 +86,13 @@ void expand_bytecode(std::vector<rot8_bytecode> &tape, R8Operand arg, rot8_bytec
     }
 }
 
-std::vector<rot8_bytecode> r8asm_tape_out(std::span<const R8Instruction> ops)
-{
+std::vector<rot8_bytecode> r8asm_tape_out(std::span<const R8Instruction> ops) {
     std::vector<rot8_bytecode> tape;
     for (const auto it : ops) {
 	if (const rot8_bytecode *bc = std::get_if<rot8_bytecode>(&it.op)) {
 	    expand_bytecode(tape, it.arg, *bc);
-	} else if (const r8asm_builtin *builtin = std::get_if<r8asm_builtin>(&it.op))
+	} else if (const r8asm_builtin *builtin =
+		       std::get_if<r8asm_builtin>(&it.op))
 	    switch (*builtin) {
 	    case r8asm_builtin::LOOP:
 		expand_loop(tape, it.arg);
@@ -104,6 +108,8 @@ std::vector<rot8_bytecode> r8asm_tape_out(std::span<const R8Instruction> ops)
 		break;
 	    case r8asm_builtin::ANCHOR:
 		expand_anchor(tape, it.arg);
+	    case r8asm_builtin::ERASE:
+		expand_erase(tape, it.arg);
 		break;
 	    default:;
 	    }

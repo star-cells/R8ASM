@@ -1,20 +1,38 @@
 #include "r8asm/r8asm_macro.hh"
+#include "r8asm/r8asm_core.hh"
 
 std::map<std::string, R8Macro> macros;
 
+R8Operand read_arg(std::vector<R8Operand> &argv, R8Operand argf,
+		   argc_type argc) {
+    if (std::string *str = std::get_if<std::string>(&argf)) {
+	if ((*str) == "%0")
+	    return ((r8asm_data)argc);
+	else if ((*str)[0] == '%')
+	    return (argv[std::stoi(str->substr(1)) - 1]);
+	// e.g. "%15" -> "15" -> 14 -> argv[14]
+    }
+    return (argf);
+}
+
 std::vector<R8Instruction> expand_macro(std::string macro_name,
-    std::vector<R8Operand> argv)
-{
+					std::vector<R8Operand> argv) {
     std::vector<R8Instruction> tmp_tape;
 
-    // TODO:explain args
-
     for (auto i : macros[macro_name].ins) {
-	if (std::get_if<rot8_bytecode>(&i.op) || std::get_if<r8asm_builtin>(&i.op))
-	    tmp_tape.push_back(i);
+	if (std::get_if<rot8_bytecode>(&i.op) ||
+	    std::get_if<r8asm_builtin>(&i.op))
+	    tmp_tape.push_back(
+		{i.op, read_arg(argv, i.arg, macros[macro_name].argc)});
 	else if (r8asm_macro *macro = std::get_if<r8asm_macro>(&i.op)) {
-	    std::vector<R8Instruction> expanded_macro = expand_macro(macro->name, macro->args);
-	    tmp_tape.insert(tmp_tape.end(), expanded_macro.begin(), expanded_macro.end());
+	    std::vector<R8Operand> macro_args;
+	    for (auto j : macro->args)
+		macro_args.push_back(
+		    read_arg(argv, j, macros[macro_name].argc));
+	    std::vector<R8Instruction> macro_body =
+		expand_macro(macro->name, macro_args);
+	    tmp_tape.insert(tmp_tape.end(), macro_body.begin(),
+			    macro_body.end());
 	}
     }
 

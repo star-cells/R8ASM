@@ -32,10 +32,12 @@ enum class r8asm_builtin {
     TP,
     XOR,
     ANCHOR,
+    ERASE,
     MACRO,
     ENDMACRO,
 };
-using R8Operand = std::variant<std::monostate, r8asm_data, std::string>;
+
+using R8Operand = std::variant<std::monostate, r8asm_data, std::string, std::vector<std::string>>;
 
 struct r8asm_macro {
     std::string name;
