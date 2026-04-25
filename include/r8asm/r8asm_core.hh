@@ -37,7 +37,8 @@ enum class r8asm_builtin {
     ENDMACRO,
 };
 
-using R8Operand = std::variant<std::monostate, r8asm_data, std::string, std::vector<std::string>>;
+using R8Operand = std::variant<std::monostate, r8asm_data, std::string,
+			       std::vector<std::string>>;
 
 struct r8asm_macro {
     std::string name;
@@ -49,10 +50,6 @@ using R8MetaOp = std::variant<r8asm_builtin, r8asm_macro, rot8_bytecode>;
 struct R8Instruction {
     R8MetaOp op;
     R8Operand arg;
-    R8Instruction(R8MetaOp in_op, R8Operand in_arg = std::monostate {})
-	: op(in_op)
-	, arg(in_arg) {
-	};
 };
 
 extern std::map<std::string, r8asm_label> labels;

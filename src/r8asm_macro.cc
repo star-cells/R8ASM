@@ -1,7 +1,16 @@
 #include "r8asm/r8asm_macro.hh"
 #include "r8asm/r8asm_core.hh"
+#include <vector>
 
-std::map<std::string, R8Macro> macros;
+std::map<std::string, R8Macro> macros = {
+    {std::string("STEP"),
+     {1,
+      {{rot8_bytecode::STP, std::string("%1")},
+       {rot8_bytecode::STP, std::string("%1")}}}},
+    {std::string("BACK"),
+     {1,
+      {{rot8_bytecode::BTP, std::string("%1")},
+       {rot8_bytecode::BTP, std::string("%1")}}}}};
 
 R8Operand read_arg(std::vector<R8Operand> &argv, R8Operand argf,
 		   argc_type argc) {
@@ -15,8 +24,8 @@ R8Operand read_arg(std::vector<R8Operand> &argv, R8Operand argf,
     return (argf);
 }
 
-std::vector<R8Instruction> expand_macro(std::string macro_name,
-					std::vector<R8Operand> argv) {
+std::vector<R8Instruction> expand_single_macro(std::string macro_name,
+					       std::vector<R8Operand> argv) {
     std::vector<R8Instruction> tmp_tape;
 
     for (auto i : macros[macro_name].ins) {
@@ -30,11 +39,15 @@ std::vector<R8Instruction> expand_macro(std::string macro_name,
 		macro_args.push_back(
 		    read_arg(argv, j, macros[macro_name].argc));
 	    std::vector<R8Instruction> macro_body =
-		expand_macro(macro->name, macro_args);
+		expand_single_macro(macro->name, macro_args);
 	    tmp_tape.insert(tmp_tape.end(), macro_body.begin(),
 			    macro_body.end());
 	}
     }
 
     return (tmp_tape);
+}
+
+std::vector<R8Instruction> expand_macros(std::vector<R8Instruction> &ins) {
+    std::vector<R8Instruction> out_tape;
 }
