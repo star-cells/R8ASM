@@ -109,6 +109,7 @@ std::vector<rot8_bytecode> r8asm_tape_out(std::span<const R8Instruction> ops) {
 	    case r8asm_builtin::ANCHOR:
 		expand_anchor(tape, it.arg);
 	    case r8asm_builtin::ERASE:
+		break;
 		expand_erase(tape, it.arg);
 		break;
 	    default:;

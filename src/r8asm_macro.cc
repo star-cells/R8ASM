@@ -1,5 +1,6 @@
 #include "r8asm/r8asm_macro.hh"
 #include "r8asm/r8asm_core.hh"
+#include <variant>
 #include <vector>
 
 std::map<std::string, R8Macro> macros = {
@@ -50,4 +51,13 @@ std::vector<R8Instruction> expand_single_macro(std::string macro_name,
 
 std::vector<R8Instruction> expand_macros(std::vector<R8Instruction> &ins) {
     std::vector<R8Instruction> out_tape;
+    for (auto i : ins) {
+	if (r8asm_macro *macro = std::get_if<r8asm_macro>(&i.op)) {
+	    std::vector<R8Instruction> tmp_tape =
+		(expand_single_macro(macro->name, macro->args));
+	    out_tape.insert(out_tape.end(), tmp_tape.begin(), tmp_tape.end());
+	} else
+	    out_tape.push_back(i);
+    }
+    return (out_tape);
 }
