@@ -1,9 +1,6 @@
 #include <iostream>
 
 #include "r8asm/r8asm.hh"
-#include "r8asm/r8asm_asm.hh"
-#include "r8asm/r8asm_core.hh"
-#include "r8asm/r8asm_macro.hh"
 
 int main() {
     std::vector<R8Instruction> ins = {
