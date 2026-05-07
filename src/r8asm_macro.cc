@@ -28,6 +28,7 @@ R8Operand read_arg(std::vector<R8Operand> &argv, R8Operand argf,
 std::vector<R8Instruction> expand_single_macro(std::string macro_name,
 					       std::vector<R8Operand> argv) {
     std::vector<R8Instruction> tmp_tape;
+    std::vector<R8Operand> macro_args;
 
     for (auto i : macros[macro_name].ins) {
 	if (std::get_if<rot8_bytecode>(&i.op) ||
@@ -35,7 +36,7 @@ std::vector<R8Instruction> expand_single_macro(std::string macro_name,
 	    tmp_tape.push_back(
 		{i.op, read_arg(argv, i.arg, macros[macro_name].argc)});
 	else if (r8asm_macro *macro = std::get_if<r8asm_macro>(&i.op)) {
-	    std::vector<R8Operand> macro_args;
+	    macro_args.clear();
 	    for (auto j : macro->args)
 		macro_args.push_back(
 		    read_arg(argv, j, macros[macro_name].argc));
@@ -50,14 +51,15 @@ std::vector<R8Instruction> expand_single_macro(std::string macro_name,
 }
 
 std::vector<R8Instruction> expand_macros(std::vector<R8Instruction> &ins) {
-    std::vector<R8Instruction> out_tape;
+    std::vector<R8Instruction> tape;
+    std::vector<R8Instruction> tmp_tape;
     for (auto i : ins) {
+	tmp_tape.clear();
 	if (r8asm_macro *macro = std::get_if<r8asm_macro>(&i.op)) {
-	    std::vector<R8Instruction> tmp_tape =
-		(expand_single_macro(macro->name, macro->args));
-	    out_tape.insert(out_tape.end(), tmp_tape.begin(), tmp_tape.end());
+	    tmp_tape = (expand_single_macro(macro->name, macro->args));
+	    tape.insert(tape.end(), tmp_tape.begin(), tmp_tape.end());
 	} else
-	    out_tape.push_back(i);
+	    tape.push_back(i);
     }
-    return (out_tape);
+    return (tape);
 }
