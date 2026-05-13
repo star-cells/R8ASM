@@ -35,26 +35,29 @@ enum class r8asm_builtin {
     ERASE,
     MACRO,
     ENDMACRO,
+    REPEAT,
+    ENDREPEAT,
 };
 
-using R8Operand = std::variant<std::monostate, r8asm_data, std::string,
-			       std::vector<std::string>>;
+using R8Operand = std::variant<std::monostate, r8asm_data, std::string>;
 
-struct r8asm_macro {
+struct r8asm_macrocall {
     std::string name;
-    std::vector<R8Operand> args;
+    std::vector<R8Operand> actual_args;
 };
 
-using R8MetaOp = std::variant<r8asm_builtin, r8asm_macro, rot8_bytecode>;
+using R8MetaOp = std::variant<r8asm_builtin, r8asm_macrocall, rot8_bytecode>;
 
 struct R8Instruction {
     R8MetaOp op;
-    R8Operand arg;
+    R8Operand formal_para;
 };
 
 extern std::map<std::string, r8asm_label> labels;
 extern std::map<std::string, r8asm_data> datas;
 extern mem_size_type dataptr;
+
+extern std::map<std::string, R8MetaOp> r8asm_insmap;
 
 extern unit_size_type UNIT_SIZE;
 // #define DEFAULT_UNIT_SIZE (sizeof(unit_size_type) * 8)

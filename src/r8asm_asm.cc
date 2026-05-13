@@ -90,27 +90,27 @@ std::vector<rot8_bytecode> r8asm_tape_out(std::span<const R8Instruction> ops) {
     std::vector<rot8_bytecode> tape;
     for (const auto it : ops) {
 	if (const rot8_bytecode *bc = std::get_if<rot8_bytecode>(&it.op)) {
-	    expand_bytecode(tape, it.arg, *bc);
+	    expand_bytecode(tape, it.formal_para, *bc);
 	} else if (const r8asm_builtin *builtin =
 		       std::get_if<r8asm_builtin>(&it.op))
 	    switch (*builtin) {
 	    case r8asm_builtin::LOOP:
-		expand_loop(tape, it.arg);
+		expand_loop(tape, it.formal_para);
 		break;
 	    case r8asm_builtin::ENDLOOP:
-		expand_endloop(tape, it.arg);
+		expand_endloop(tape, it.formal_para);
 		break;
 	    case r8asm_builtin::TP:;
-		expand_tp(tape, it.arg);
+		expand_tp(tape, it.formal_para);
 		break;
 	    case r8asm_builtin::XOR:
-		expand_xor(tape, it.arg);
+		expand_xor(tape, it.formal_para);
 		break;
 	    case r8asm_builtin::ANCHOR:
-		expand_anchor(tape, it.arg);
+		expand_anchor(tape, it.formal_para);
 	    case r8asm_builtin::ERASE:
 		break;
-		expand_erase(tape, it.arg);
+		expand_erase(tape, it.formal_para);
 		break;
 	    default:;
 	    }

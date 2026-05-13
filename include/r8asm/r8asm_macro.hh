@@ -7,11 +7,11 @@ struct R8Macro {
     argc_type argc = 0;
     std::vector<R8Instruction> ins;
 };
-extern std::map<std::string, R8Macro> macros;
+extern std::map<std::string, R8Macro> r8asm_macromap;
 
 std::vector<R8Instruction> expand_single_macro(std::string macro_name,
-					       std::vector<R8Operand> argv);
+    std::vector<R8Operand> argv);
 
-std::vector<R8Instruction> expand_macros(std::vector<R8Instruction> &ins);
+std::vector<R8Instruction> expand_macros(std::vector<R8Instruction> ins);
 
 #endif
