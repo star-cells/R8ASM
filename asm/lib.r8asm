@@ -10,13 +10,14 @@ btp %1
 
 %macro and 3
     .anchor before_and
-    .tp %1
 
+    .tp %1
     stp
-    xor _UNIT_MAX
+    .xor _UNIT_MAX
     btp
 
     .loop
+        .tp %1
         biz
             .tp %2
             biz
@@ -27,10 +28,8 @@ btp %1
                 rnz
                 ror
             rnz
-            .tp %2
             ror
         rnz
-        .tp %1
         ror
     .endloop
 

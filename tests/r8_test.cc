@@ -4,7 +4,7 @@
 #include "r8asm/r8asm_parse.hh"
 
 int main(int argc, char *argv[]) {
-    auto lib = read_src("/home/admin/Git/R8ASM/asm/lib.r8asm");
+    auto lib = read_src("asm/lib.r8asm");
     /*
     for (auto i : lib.raw_src)
 	for (auto j : i)

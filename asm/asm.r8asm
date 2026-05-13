@@ -1,9 +1,9 @@
-inp
+.xor 23
 .anchor arg1
-step
-inp
+step 1
+.xor 34
 .anchor arg2
-step
+step 1
 .anchor ans
 and arg1 arg2 ans
 .tp ans
