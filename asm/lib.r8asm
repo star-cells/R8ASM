@@ -1,0 +1,38 @@
+%macro step 1
+stp %1
+stp %1
+%endmacro
+
+%macro back 1
+btp %1
+btp %1
+%endmacro
+
+%macro and 3
+    .anchor before_and
+    .tp %1
+
+    stp
+    xor _UNIT_MAX
+    btp
+
+    .loop
+        biz
+            .tp %2
+            biz
+                .tp %3
+                flb
+                biz
+                    flb
+                rnz
+                ror
+            rnz
+            .tp %2
+            ror
+        rnz
+        .tp %1
+        ror
+    .endloop
+
+    .tp before_and
+%endmacro

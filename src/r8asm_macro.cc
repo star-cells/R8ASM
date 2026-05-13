@@ -2,15 +2,7 @@
 #include <variant>
 #include <vector>
 
-std::map<std::string, R8Macro> r8asm_macromap = {
-    {std::string("STEP"),
-     {1,
-      {{rot8_bytecode::STP, std::string("%1")},
-       {rot8_bytecode::STP, std::string("%1")}}}},
-    {std::string("BACK"),
-     {1,
-      {{rot8_bytecode::BTP, std::string("%1")},
-       {rot8_bytecode::BTP, std::string("%1")}}}}};
+std::map<std::string, R8Macro> r8asm_macromap;
 
 R8Operand read_arg(std::vector<R8Operand> &actual_args, R8Operand formal_para,
 		   argc_type argc) {

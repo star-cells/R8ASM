@@ -106,11 +106,11 @@ r8asm_translate_single_ins(std::vector<std::string> const raw_ins) {
 }
 
 void R8Src::preprocess() {
-    std::vector<R8Instruction> codeblock;
+    std::vector<R8Instruction> tmp_codeblock;
     while (!this->codeblocks.empty()) {
 	auto i = this->codeblocks.top();
 	this->codeblocks.pop();
-	codeblock.clear();
+	tmp_codeblock.clear();
 	auto raw_codeblock =
 	    std::ranges::subrange(std::next(i.first), i.second);
 	/*
@@ -119,12 +119,12 @@ void R8Src::preprocess() {
 	    subrange:--------------------4 5 6---------------
 	*/
 	for (auto j : raw_codeblock)
-	    codeblock.push_back(r8asm_translate_single_ins(j));
+	    tmp_codeblock.push_back(r8asm_translate_single_ins(j));
 	if ((*i.first)[0] == "%macro") {
 	    r8asm_macromap.insert_or_assign(
 		(*i.first)[1], R8Macro{(argc_type)std::get<r8asm_data>(
 					   r8asm_arg_stoi((*i.first)[2])),
-				       codeblock});
+				       tmp_codeblock});
 	} else if ((*i.first)[0] == "%repeat") {
 	    for (auto count =
 		     std::get<r8asm_data>(r8asm_arg_stoi((*i.first)[1]));

@@ -1,12 +1,10 @@
-%macro test_erase 1
-.tp %1
-.loop _UNIT_MAX
-biz
-flb
-rnz
-ror
-.endloop
-%endmacro
-
-.xor 15
-test_erase $
+inp
+.anchor arg1
+step
+inp
+.anchor arg2
+step
+.anchor ans
+and arg1 arg2 ans
+.tp ans
+out
