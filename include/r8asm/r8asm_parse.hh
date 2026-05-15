@@ -4,7 +4,7 @@
 #include "r8asm/r8asm_core.hh"
 #include <list>
 #include <map>
-#include <stack>
+#include <queue>
 #include <string>
 #include <utility>
 #include <vector>
@@ -15,7 +15,7 @@ typedef std::list<std::vector<std::string>>::iterator r8asm_src_point;
 
 struct R8Src {
     std::list<std::vector<std::string>> raw_src;
-    std::stack<std::pair<r8asm_src_point, r8asm_src_point>> codeblocks;
+    std::queue<std::pair<r8asm_src_point, r8asm_src_point>> codeblocks;
     void preprocess();
 };
 

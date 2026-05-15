@@ -108,7 +108,7 @@ r8asm_translate_single_ins(std::vector<std::string> const raw_ins) {
 void R8Src::preprocess() {
     std::vector<R8Instruction> tmp_codeblock;
     while (!this->codeblocks.empty()) {
-	auto i = this->codeblocks.top();
+	auto i = this->codeblocks.front();
 	this->codeblocks.pop();
 	tmp_codeblock.clear();
 	auto raw_codeblock =

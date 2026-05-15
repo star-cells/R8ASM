@@ -11,10 +11,33 @@ btp %1
 %macro and 3
 .anchor before_and
 
-%repeat _UNIT_MAX
-out
-out
+.tp %1
+%repeat _UNIT_SIZE
+    biz
+        .tp %2
+        biz
+            .tp %3
+            flb
+            biz
+                flb
+            rnz
+            .tp %2
+        rnz
+        .tp %1
+    rnz
+    ror
+    .tp %2
+    ror
+    .tp %3
+    ror
+    .tp %1
+%endrepeat
+
+.tp before_and
 %endrepeat
 
 .tp before_and
 %endmacro
+
+out
+out
