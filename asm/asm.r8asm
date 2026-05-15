@@ -1,10 +1,11 @@
-.xor 23
+.xor _UNIT_MAX
 .anchor arg1
-step 1
-.xor 34
+step 2
+.xor 20
 .anchor arg2
-step 1
+back 1
 .anchor ans
+
 and arg1 arg2 ans
 .tp ans
 out

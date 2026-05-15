@@ -60,8 +60,10 @@ extern mem_size_type dataptr;
 extern std::map<std::string, R8MetaOp> r8asm_insmap;
 
 extern unit_size_type UNIT_SIZE;
+#define UNIT_MAX (((uint64_t)1 << UNIT_SIZE) - 1)
+
 // #define DEFAULT_UNIT_SIZE (sizeof(unit_size_type) * 8)
 #define DEFAULT_UNIT_SIZE 8 // Just for test.
-#define UNIT_MAX (((uint64_t)1 << UNIT_SIZE) - 1)
+#define DEFAULT_UNIT_MAX (((uint64_t)1 << DEFAULT_UNIT_SIZE) - 1)
 
 #endif

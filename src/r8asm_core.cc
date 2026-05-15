@@ -4,7 +4,8 @@ mem_size_type dataptr = 0;
 
 std::map<std::string, r8asm_label> labels = {{std::string("main"), 0}};
 std::map<std::string, r8asm_data> datas = {
-    {std::string("_UNIT_MAX"), UNIT_MAX}};
+    {std::string("_UNIT_MAX"), DEFAULT_UNIT_MAX},
+    {std::string{"_UNIT_SIZE"}, DEFAULT_UNIT_SIZE}};
 
 std::map<std::string, R8MetaOp> r8asm_insmap = {
     {"stp", rot8_bytecode::STP},	{"btp", rot8_bytecode::BTP},

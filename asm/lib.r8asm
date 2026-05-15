@@ -9,29 +9,12 @@ btp %1
 %endmacro
 
 %macro and 3
-    .anchor before_and
+.anchor before_and
 
-    .tp %1
-    stp
-    .xor _UNIT_MAX
-    btp
+%repeat _UNIT_MAX
+out
+out
+%endrepeat
 
-    .loop
-        .tp %1
-        biz
-            .tp %2
-            biz
-                .tp %3
-                flb
-                biz
-                    flb
-                rnz
-                ror
-            rnz
-            ror
-        rnz
-        ror
-    .endloop
-
-    .tp before_and
+.tp before_and
 %endmacro
