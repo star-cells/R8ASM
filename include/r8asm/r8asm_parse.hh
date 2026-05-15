@@ -7,6 +7,7 @@
 #include <queue>
 #include <string>
 #include <utility>
+#include <queue>
 #include <vector>
 
 #define EMPTY_CHARS (" \t\n\r\f\v")

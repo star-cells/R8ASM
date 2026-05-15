@@ -9,35 +9,28 @@ btp %1
 %endmacro
 
 %macro and 3
-.anchor before_and
+; bitwise AND: result[i] = arg1[i] AND arg2[i]
+; each %repeat copy processes one bit (LSB after previous rotations)
 
-.tp %1
 %repeat _UNIT_SIZE
-    biz
-        .tp %2
-        biz
-            .tp %3
-            flb
-            biz
-                flb
-            rnz
-            .tp %2
-        rnz
-        .tp %1
-    rnz
-    ror
-    .tp %2
-    ror
-    .tp %3
-    ror
-    .tp %1
-%endrepeat
+    .tp %1          ; → arg1
+    biz             ; if arg1&1 == 0 → skip (result=0)
+        .tp %2      ; → arg2
+        biz         ; if arg2&1 == 0 → skip (result=0)
+            .tp %3  ; → ans
+            flb     ; set ans LSB = 1 (both bits were 1)
+            .tp %2  ; ← back to arg2
+            flb     ; clear arg2 LSB so inner rnz exits
+        rnz         ; arg2 LSB = 0 → exit
+        .tp %1      ; ← back to arg1
+        flb         ; clear arg1 LSB so outer rnz exits
+    rnz             ; arg1 LSB = 0 → exit
 
-.tp before_and
+    .tp %1          ; rotate arg1 for next bit
+    ror
+    .tp %2          ; rotate arg2 for next bit
+    ror
+    .tp %3          ; rotate ans for next bit
+    ror
 %endrepeat
-
-.tp before_and
 %endmacro
-
-out
-out
