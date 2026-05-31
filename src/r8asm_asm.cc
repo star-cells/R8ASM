@@ -63,6 +63,7 @@ void expand_anchor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
 	datas.insert({std::to_string(*name), dataptr});
 }
 
+/*
 void expand_erase(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     std::vector<rot8_bytecode> tmp = {rot8_bytecode::BIZ, rot8_bytecode::FLB,
 				      rot8_bytecode::RNZ,
@@ -70,7 +71,7 @@ void expand_erase(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     for (unit_size_type i = 0; i < UNIT_SIZE; i++)
 	tape.insert(tape.end(), tmp.begin(), tmp.end());
     return;
-}
+}*/
 
 void expand_bytecode(std::vector<rot8_bytecode> &tape, R8Operand arg,
 		     rot8_bytecode op, bool count_offset = true) {
@@ -108,9 +109,6 @@ std::vector<rot8_bytecode> r8asm_tape_out(std::span<const R8Instruction> ops) {
 		break;
 	    case r8asm_builtin::ANCHOR:
 		expand_anchor(tape, it.formal_para);
-	    case r8asm_builtin::ERASE:
-		break;
-		expand_erase(tape, it.formal_para);
 		break;
 	    default:;
 	    }

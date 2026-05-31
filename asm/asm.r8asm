@@ -1,5 +1,5 @@
 .xor 13
-copy_to_buffer 1
+copy_to_buffer 3
 out
 stp
 out

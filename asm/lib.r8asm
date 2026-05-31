@@ -1,17 +1,15 @@
 ;lib.r8asm
+
+
 %macro step 1
 stp %1
 stp %1
 %endmacro
 
-
-
 %macro back 1
 btp %1
 btp %1
 %endmacro
-
-
 
 %macro set_0 0
 biz
@@ -19,13 +17,17 @@ flb
 rnz
 %endmacro
 
-
-
 %macro set_1 0
 set_0
 flb
 %endmacro
 
+%macro erase 0
+%repeat _UNIT_SIZE
+set_0
+ror
+%endrepeat
+%endmacro
 
 
 ;   Macro copy_to_buffer.
@@ -35,8 +37,12 @@ flb
 ;TODO
 
 %macro copy_to_buffer 1
-
 .anchor before_copy_to_buffer
+stp
+erase
+.tp %1
+erase
+.tp before_copy_to_buffer
 %repeat _UNIT_SIZE
 biz
     stp
@@ -46,6 +52,13 @@ biz
     .tp before_copy_to_buffer
     flb
 rnz
+.tp before_copy_to_buffer
+ror
+stp
+ror
+.tp %1
+ror
+.tp before_copy_to_buffer
 %endrepeat
 
 .tp %1
@@ -56,6 +69,11 @@ biz
     .tp %1
     flb
 rnz
+.tp before_copy_to_buffer
+ror
+.tp %1
+ror
+.tp %1
 %endrepeat
 
 .tp before_copy_to_buffer
@@ -63,13 +81,14 @@ rnz
 
 
 
-;   Macro and
+
+;   Macro unsafe_and
 ;   %1: arg1
 ;   %2: arg2
 ;   %3: ans
 ;TODO
-%macro and 3
-.anchor before_and
+%macro unsafe_and 3
+.anchor before_unsafe_and
 
 %repeat _UNIT_SIZE
     .tp %1
@@ -92,7 +111,7 @@ rnz
     .tp %3
     ror
 %endrepeat
-.tp before_and
+.tp before_unsafe_and
 %endmacro
 
 

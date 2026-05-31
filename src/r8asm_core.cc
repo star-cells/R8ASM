@@ -14,5 +14,5 @@ std::map<std::string, R8MetaOp> r8asm_insmap = {
     {"out", rot8_bytecode::OUT},	{"inp", rot8_bytecode::INP},
     {".loop", r8asm_builtin::LOOP},	{".endloop", r8asm_builtin::ENDLOOP},
     {".anchor", r8asm_builtin::ANCHOR}, {".tp", r8asm_builtin::TP},
-    {".xor", r8asm_builtin::XOR},	{".erase", r8asm_builtin::ERASE},
+    {".xor", r8asm_builtin::XOR},
 };
