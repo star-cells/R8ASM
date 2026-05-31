@@ -1,11 +1,5 @@
-.xor _UNIT_MAX
-.anchor arg1
-step 2
-.xor 20
-.anchor arg2
-back 1
-.anchor ans
-
-and arg1 arg2 ans
-.tp ans
+.xor 13
+copy_to_buffer 1
+out
+stp
 out

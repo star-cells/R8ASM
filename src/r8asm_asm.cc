@@ -65,8 +65,8 @@ void expand_anchor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
 
 void expand_erase(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     std::vector<rot8_bytecode> tmp = {rot8_bytecode::BIZ, rot8_bytecode::FLB,
-				      rot8_bytecode::ROR,
-				      rot8_bytecode::RNZ}; // [-+]
+				      rot8_bytecode::RNZ,
+				      rot8_bytecode::ROR}; // [-]+
     for (unit_size_type i = 0; i < UNIT_SIZE; i++)
 	tape.insert(tape.end(), tmp.begin(), tmp.end());
     return;

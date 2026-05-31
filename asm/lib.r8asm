@@ -1,36 +1,114 @@
+;lib.r8asm
 %macro step 1
 stp %1
 stp %1
 %endmacro
+
+
 
 %macro back 1
 btp %1
 btp %1
 %endmacro
 
+
+
+%macro set_0 0
+biz
+flb
+rnz
+%endmacro
+
+
+
+%macro set_1 0
+set_0
+flb
+%endmacro
+
+
+
+;   Macro copy_to_buffer.
+;   %1: tmp
+;move(0,{0',1'})
+;move(1',0)
+;TODO
+
+%macro copy_to_buffer 1
+
+.anchor before_copy_to_buffer
+%repeat _UNIT_SIZE
+biz
+    stp
+    set_1
+    .tp %1
+    set_1
+    .tp before_copy_to_buffer
+    flb
+rnz
+%endrepeat
+
+.tp %1
+%repeat _UNIT_SIZE
+biz
+    .tp before_copy_to_buffer
+    set_1
+    .tp %1
+    flb
+rnz
+%endrepeat
+
+.tp before_copy_to_buffer
+%endmacro
+
+
+
+;   Macro and
+;   %1: arg1
+;   %2: arg2
+;   %3: ans
+;TODO
 %macro and 3
-; bitwise AND: result[i] = arg1[i] AND arg2[i]
-; each %repeat copy processes one bit (LSB after previous rotations)
+.anchor before_and
 
 %repeat _UNIT_SIZE
-    .tp %1          ; → arg1
-    biz             ; if arg1&1 == 0 → skip (result=0)
-        .tp %2      ; → arg2
-        biz         ; if arg2&1 == 0 → skip (result=0)
-            .tp %3  ; → ans
-            flb     ; set ans LSB = 1 (both bits were 1)
-            .tp %2  ; ← back to arg2
-            flb     ; clear arg2 LSB so inner rnz exits
-        rnz         ; arg2 LSB = 0 → exit
-        .tp %1      ; ← back to arg1
-        flb         ; clear arg1 LSB so outer rnz exits
-    rnz             ; arg1 LSB = 0 → exit
+    .tp %1
+    biz
+        .tp %2
+        biz
+            .tp %3
+            set_1
+            .tp %2
+            set_0
+        rnz
+        .tp %1
+        set_0
+    rnz
 
-    .tp %1          ; rotate arg1 for next bit
+    .tp %1
     ror
-    .tp %2          ; rotate arg2 for next bit
+    .tp %2
     ror
-    .tp %3          ; rotate ans for next bit
+    .tp %3
     ror
 %endrepeat
+.tp before_and
+%endmacro
+
+
+
+;   Macro or
+;   %1: arg1
+;   %2: arg2
+;   %3: ans
+;TODO
+%macro or 3
+.anchor before_or
+%repeat _UNIT_SIZE
+    .tp %1
+    biz
+
+    rnz
+%endrepeat
+.tp before_or
 %endmacro
