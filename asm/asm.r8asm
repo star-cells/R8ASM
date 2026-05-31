@@ -1,4 +1,4 @@
-;
+
 .xor 13
 copy_to_buffer 1
 out
