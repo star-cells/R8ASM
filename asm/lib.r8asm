@@ -32,9 +32,6 @@ ror
 
 ;   Macro copy_to_buffer.
 ;   %1: tmp
-;move(0,{0',1'})
-;move(1',0)
-;TODO
 
 %macro copy_to_buffer 1
 .anchor before_copy_to_buffer
@@ -86,7 +83,6 @@ ror
 ;   %1: arg1
 ;   %2: arg2
 ;   %3: ans
-;TODO
 %macro unsafe_and 3
 .anchor before_unsafe_and
 
@@ -116,18 +112,22 @@ ror
 
 
 
-;   Macro or
-;   %1: arg1
-;   %2: arg2
-;   %3: ans
-;TODO
-%macro or 3
-.anchor before_or
-%repeat _UNIT_SIZE
-    .tp %1
-    biz
 
-    rnz
-%endrepeat
-.tp before_or
+;   Macro and
+;   %1:unit1
+;   %2:unit2
+;   %3:ans_unit
+%macro and 3
+.anchor before_and
+
+.tp %1
+copy_to_buffer %3
+stp                                             ;Before r8asm_arg_stoi suppports evaluating,it's a compromise.
+.anchor and_buf_1            ;
+.tp %2
+copy_to_buffer %3
+stp                                            ;
+.anchor and_buf_2           ;
+unsafe_and and_buf_1 and_buf_2 ans
+.tp before_and
 %endmacro

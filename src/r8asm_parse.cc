@@ -17,7 +17,7 @@ std::map<std::string, R8MetaOp> r8asm_parsemap = {
     {"%endrepeat", r8asm_builtin::ENDREPEAT},
 };
 
-void r8asm_trim(std::string &str) {
+void r8asm_trim(std::string &str) { // Clean empty chars in the string.
     auto start = str.find_first_not_of(EMPTY_CHARS);
 
     if (!(start ==
@@ -28,7 +28,7 @@ void r8asm_trim(std::string &str) {
 	str = "";
 }
 
-std::string r8asm_peel(std::string &str) {
+std::string r8asm_peel(std::string &str) { // Peel a word from string.
     r8asm_trim(str);
     auto end = str.find_first_of(EMPTY_CHARS);
 
@@ -76,7 +76,7 @@ R8Src read_src(std::string filename) {
     return (src);
 }
 
-R8Operand r8asm_arg_stoi(std::string raw_arg) {
+R8Operand r8asm_arg_stoi(std::string raw_arg) { // TODO:expression evaluating
     try {
 	r8asm_data arg = std::stoi(raw_arg);
 	return (arg);

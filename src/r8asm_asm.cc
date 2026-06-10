@@ -58,9 +58,9 @@ void expand_tp(std::vector<rot8_bytecode> &tape, R8Operand arg,
 
 void expand_anchor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     if (const std::string *name = std::get_if<std::string>(&arg))
-	datas.insert({*name, dataptr});
+	datas.insert_or_assign(*name, dataptr);
     else if (const r8asm_data *name = std::get_if<r8asm_data>(&arg))
-	datas.insert({std::to_string(*name), dataptr});
+	datas.insert_or_assign(std::to_string(*name), dataptr);
 }
 
 /*

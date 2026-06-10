@@ -1,5 +1,15 @@
+step 3
 .xor 13
-copy_to_buffer 3
+.anchor arg1
+step 1
+.xor 7
+.anchor arg2
+back 2
+.anchor ans
+and arg1 arg2 ans
+.tp arg1
 out
-stp
+.tp arg2
+out
+.tp ans
 out

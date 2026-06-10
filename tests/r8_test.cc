@@ -14,5 +14,6 @@ int main(int argc, char *argv[]) {
     auto out_tape = r8asm_tape_out(expand_macros(r8asm_preprocess(src)));
     for (auto i : out_tape)
 	std::cout << ROT8_BC_TO_CHAR(i);
+    std::cout << std::endl;
     return (0);
 }
