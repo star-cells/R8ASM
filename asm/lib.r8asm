@@ -70,7 +70,6 @@ rnz
 ror
 .tp %1
 ror
-.tp %1
 %endrepeat
 
 .tp before_copy_to_buffer
