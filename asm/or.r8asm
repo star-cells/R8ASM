@@ -62,7 +62,7 @@ stp
 bit_copy_to_buffer %3
 stp
 .anchor bit_or_buf_2
-bit_unsafe_or bit_or_buf_1 bit_or:_buf_2 %3
+bit_unsafe_or bit_or_buf_1 bit_or buf_2 %3
 .tp before_or
 %endmacro
 
