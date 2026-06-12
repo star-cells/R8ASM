@@ -37,6 +37,7 @@ enum class r8asm_builtin {
     ENDMACRO,
     REPEAT,
     ENDREPEAT,
+    INCLUDE,
 };
 
 using R8Operand = std::variant<std::monostate, r8asm_data, std::string>;

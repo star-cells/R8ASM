@@ -29,48 +29,65 @@ ror
 %endrepeat
 %endmacro
 
+%macro bit_move_to 1
+.anchor before_bit_move_to
+.tp %1
+set_0
+.tp before_bit_move_to
+biz
+    .tp %1
+    flb
+    .tp before_bit_move_to
+    flb
+rnz
+.tp before_bit_move_to
+%endmacro
+
+
+;   Macro bit_copy_to_buffer.
+;   %1: tmp
+
+%macro bit_copy_to_buffer 1
+.anchor before_bit_copy_to_buffer
+
+stp
+set_0
+.tp %1
+set_0
+.tp before_bit_copy_to_buffer
+biz
+    flb
+    stp
+    flb
+    .tp %1
+    flb
+    .tp before_bit_copy_to_buffer
+rnz
+.tp %1
+biz
+    flb
+    .tp before_bit_copy_to_buffer
+    flb
+    .tp %1
+rnz
+
+.tp before_bit_copy_to_buffer
+%endmacro
+
+
 
 ;   Macro copy_to_buffer.
 ;   %1: tmp
 
 %macro copy_to_buffer 1
 .anchor before_copy_to_buffer
-stp
-erase
-.tp %1
-erase
-.tp before_copy_to_buffer
 %repeat _UNIT_SIZE
-biz
+    bit_copy_to_buffer %1
+    ror
     stp
-    set_1
+    ror
     .tp %1
-    set_1
+    ror
     .tp before_copy_to_buffer
-    flb
-rnz
-.tp before_copy_to_buffer
-ror
-stp
-ror
-.tp %1
-ror
-.tp before_copy_to_buffer
 %endrepeat
-
-.tp %1
-%repeat _UNIT_SIZE
-biz
-    .tp before_copy_to_buffer
-    set_1
-    .tp %1
-    flb
-rnz
-.tp before_copy_to_buffer
-ror
-.tp %1
-ror
-%endrepeat
-
-.tp before_copy_to_buffer
 %endmacro

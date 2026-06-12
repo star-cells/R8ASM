@@ -1,3 +1,31 @@
+;   Macro bit_unsafe_or
+;   %1: arg1
+;   %2: arg2
+;   %3: ans
+%macro bit_unsafe_or 3
+.anchor before_bit_unsafe_or
+.tp %3
+set_0
+.tp %1
+biz
+    .tp %3
+    flb
+    .tp %1
+    flb
+rnz
+.tp %2
+biz
+    .tp %3
+    set_1
+    .tp %2
+    flb
+rnz
+
+.tp before_bit_unsafe_or
+%endmacro
+
+
+
 ;   Macro unsafe_or
 ;   %1: arg1
 ;   %2: arg2
@@ -6,23 +34,7 @@
 .anchor before_unsafe_or
 
 %repeat _UNIT_SIZE
-    .tp %3
-    set_0
-    .tp %1
-    biz
-        .tp %3
-        set_1
-        .tp %1
-        set_0
-    rnz
-    .tp %2
-    biz
-        .tp %3
-        set_1
-        .tp %2
-        set_0
-    rnz
-
+    bit_unsafe_or %1 %2 %3
     .tp %1
     ror
     .tp %2
@@ -36,6 +48,26 @@
 
 
 
+;   Macro bit_or
+;   %1: Unit arg1
+;   %2: Unit arg2
+;   %3: ans
+%macro bit_or 3
+.anchor before_or
+.tp %1
+bit_copy_to_buffer %3
+stp
+.anchor bit_or_buf_1
+.tp %2
+bit_copy_to_buffer %3
+stp
+.anchor bit_or_buf_2
+bit_unsafe_or bit_or_buf_1 bit_or:_buf_2 %3
+.tp before_or
+%endmacro
+
+
+
 ;   Macro or
 ;   %1:unit1
 ;   %2:unit2
@@ -45,11 +77,11 @@
 
 .tp %1
 copy_to_buffer %3
-stp                    ;Before r8asm_arg_stoi suppports evaluating,it's a compromise.
+stp                     ;Before r8asm_arg_stoi suppports evaluating,it's a compromise.
 .anchor or_buf_1       ;
 .tp %2
 copy_to_buffer %3
-stp                    ;
+stp                     ;
 .anchor or_buf_2       ;
 unsafe_or or_buf_1 or_buf_2 ans
 .tp before_or

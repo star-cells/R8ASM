@@ -1,3 +1,29 @@
+;   Macro bit_unsafe_and
+;   %1: arg1
+;   %2: arg2
+;   %3: ans
+%macro bit_unsafe_and 3
+.anchor before_bit_unsafe_and
+.tp %3
+set_0
+.tp %1
+biz
+    .tp %2
+    biz
+        .tp %3
+        set_1
+        .tp %2
+        set_0
+    rnz
+    .tp %1
+    set_0
+rnz
+
+.tp before_bit_unsafe_and
+%endmacro
+
+
+
 ;   Macro unsafe_and
 ;   %1: arg1
 ;   %2: arg2
@@ -6,21 +32,7 @@
 .anchor before_unsafe_and
 
 %repeat _UNIT_SIZE
-    .tp %3
-    set_0
-    .tp %1
-    biz
-        .tp %2
-        biz
-            .tp %3
-            set_1
-            .tp %2
-            set_0
-        rnz
-        .tp %1
-        set_0
-    rnz
-
+    bit_unsafe_and %1 %2 %3
     .tp %1
     ror
     .tp %2
@@ -31,6 +43,26 @@
 .tp before_unsafe_and
 %endmacro
 
+
+
+
+;   Macro bit_and
+;   %1: Unit arg1
+;   %2: Unit arg2
+;   %3: ans
+%macro bit_and 3
+.anchor before_and
+.tp %1
+bit_copy_to_buffer %3
+stp
+.anchor bit_and_buf_1
+.tp %2
+bit_copy_to_buffer %3
+stp
+.anchor bit_and_buf_2
+bit_unsafe_and bit_and_buf_1 bit_and_buf_2 %3
+.tp before_and
+%endmacro
 
 
 

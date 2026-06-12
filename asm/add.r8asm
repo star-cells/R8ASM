@@ -1,0 +1,87 @@
+;   Macro bit_add
+;   %1: Unit A
+;   %2: Unit B
+;   %3: Unit C
+;   %4: S
+;   %5: Ci
+%macro bit_add 5
+.anchor before_bit_add
+
+.tp %1
+bit_copy_to_buffer %5
+stp
+.anchor bit_add_buf_1
+.tp %2
+bit_copy_to_buffer %5
+stp
+.anchor bit_add_buf_2
+
+.tp %3
+stp
+.anchor bit_add_buf_3
+.tp %4
+set_0
+.tp %5
+set_0
+
+bit_unsafe_xor bit_add_buf_1 bit_add_buf_2 %5
+.tp %3
+bit_copy_to_buffer %4
+bit_unsafe_and bit_add_buf_3 %5 %4
+.tp %1
+bit_copy_to_buffer bit_add_buf_3
+.tp %2
+bit_copy_to_buffer bit_add_buf_3
+bit_unsafe_and bit_add_buf_1 bit_add_buf_2 bit_add_buf_3
+bit_unsafe_or bit_add_buf_3 %4 %5
+
+.tp %1
+bit_copy_to_buffer %4
+.tp %2
+bit_copy_to_buffer %4
+bit_unsafe_xor bit_add_buf_1 bit_add_buf_2 %4
+.tp %3
+bit_copy_to_buffer bit_add_buf_1
+bit_unsafe_xor %4 bit_add_buf_3 bit_add_buf_1
+.tp bit_add_buf_1
+bit_move_to %4
+
+.tp before_bit_add
+%endmacro
+
+
+;   Macro add
+;   %1: Unit A
+;   %2: Unit B
+;   %3: Unit C
+;   %4: S
+;   %5: Unit Ci
+%macro add 5
+.anchor before_add
+
+
+.tp %3
+bit_copy_to_buffer %5
+stp
+.anchor add_buf_1
+bit_move_to %5
+
+%repeat _UNIT_SIZE
+bit_add %1 %2 %5 %4 add_buf_1
+
+.tp add_buf_1
+bit_move_to %5
+
+.tp %1
+ror
+.tp %2
+ror
+.tp %4
+ror
+%endrepeat
+
+.tp add_buf_1
+bit_move_to %5
+
+.tp before_add
+%endmacro
