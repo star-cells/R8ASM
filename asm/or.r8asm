@@ -1,0 +1,56 @@
+;   Macro unsafe_or
+;   %1: arg1
+;   %2: arg2
+;   %3: ans
+%macro unsafe_or 3
+.anchor before_unsafe_or
+
+%repeat _UNIT_SIZE
+    .tp %3
+    set_0
+    .tp %1
+    biz
+        .tp %3
+        set_1
+        .tp %1
+        set_0
+    rnz
+    .tp %2
+    biz
+        .tp %3
+        set_1
+        .tp %2
+        set_0
+    rnz
+
+    .tp %1
+    ror
+    .tp %2
+    ror
+    .tp %3
+    ror
+%endrepeat
+.tp before_unsafe_or
+%endmacro
+
+
+
+
+;   Macro or
+;   %1:unit1
+;   %2:unit2
+;   %3:ans_unit
+%macro or 3
+.anchor before_or
+
+.tp %1
+copy_to_buffer %3
+stp                    ;Before r8asm_arg_stoi suppports evaluating,it's a compromise.
+.anchor or_buf_1       ;
+.tp %2
+copy_to_buffer %3
+stp                    ;
+.anchor or_buf_2       ;
+unsafe_or or_buf_1 or_buf_2 ans
+.tp before_or
+%endmacro

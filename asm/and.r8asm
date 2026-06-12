@@ -1,0 +1,54 @@
+;   Macro unsafe_and
+;   %1: arg1
+;   %2: arg2
+;   %3: ans
+%macro unsafe_and 3
+.anchor before_unsafe_and
+
+%repeat _UNIT_SIZE
+    .tp %3
+    set_0
+    .tp %1
+    biz
+        .tp %2
+        biz
+            .tp %3
+            set_1
+            .tp %2
+            set_0
+        rnz
+        .tp %1
+        set_0
+    rnz
+
+    .tp %1
+    ror
+    .tp %2
+    ror
+    .tp %3
+    ror
+%endrepeat
+.tp before_unsafe_and
+%endmacro
+
+
+
+
+;   Macro and
+;   %1:unit1
+;   %2:unit2
+;   %3:ans_unit
+%macro and 3
+.anchor before_and
+
+.tp %1
+copy_to_buffer %3
+stp                     ;Before r8asm_arg_stoi suppports evaluating,it's a compromise.
+.anchor and_buf_1       ;
+.tp %2
+copy_to_buffer %3
+stp                     ;
+.anchor and_buf_2       ;
+unsafe_and and_buf_1 and_buf_2 ans
+.tp before_and
+%endmacro

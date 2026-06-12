@@ -6,7 +6,9 @@ step 1
 .anchor arg2
 back 2
 .anchor ans
-and arg1 arg2 ans
+
+or arg1 arg2 ans
+
 .tp arg1
 out
 .tp arg2

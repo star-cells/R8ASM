@@ -5,11 +5,15 @@
 
 int main(int argc, char *argv[]) {
     auto lib = read_src("asm/lib.r8asm");
+    auto r8and = read_src("asm/and.r8asm");
+    auto r8or = read_src("asm/or.r8asm");
     /*
     for (auto i : lib.raw_src)
 	for (auto j : i)
 	    std::cout << j << ';';*/
     lib.preprocess();
+    r8and.preprocess();
+    r8or.preprocess();
     auto src = read_src("asm/asm.r8asm");
     auto out_tape = r8asm_tape_out(expand_macros(r8asm_preprocess(src)));
     for (auto i : out_tape)
