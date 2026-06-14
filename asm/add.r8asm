@@ -66,7 +66,7 @@ stp
 .anchor add_buf_1
 bit_move_to %5
 
-%repeat _UNIT_SIZE
+%repeat _CELL_SIZE
 bit_add %1 %2 %5 %4 add_buf_1
 
 .tp add_buf_1

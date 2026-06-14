@@ -23,7 +23,7 @@ flb
 %endmacro
 
 %macro erase 0
-%repeat _UNIT_SIZE
+%repeat _CELL_SIZE
 set_0
 ror
 %endrepeat
@@ -81,7 +81,7 @@ rnz
 
 %macro copy_to_buffer 1
 .anchor before_copy_to_buffer
-%repeat _UNIT_SIZE
+%repeat _CELL_SIZE
     bit_copy_to_buffer %1
     ror
     stp

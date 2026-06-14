@@ -9,8 +9,8 @@
 
 typedef uint32_t r8asm_label;
 typedef int32_t r8asm_data;
-typedef uint32_t unit_size_type;
-typedef int32_t unit_offset_type;
+typedef uint32_t cell_size_type;
+typedef int32_t cell_offset_type;
 typedef uint32_t mem_size_type;
 typedef uint32_t argc_type;
 
@@ -60,11 +60,11 @@ extern mem_size_type dataptr;
 
 extern std::map<std::string, R8MetaOp> r8asm_insmap;
 
-extern unit_size_type UNIT_SIZE;
-#define UNIT_MAX (((uint64_t)1 << UNIT_SIZE) - 1)
+extern cell_size_type CELL_SIZE;
+#define CELL_MAX (((uint64_t)1 << CELL_SIZE) - 1)
 
-// #define DEFAULT_UNIT_SIZE (sizeof(unit_size_type) * 8)
-#define DEFAULT_UNIT_SIZE 8 // Just for test.
-#define DEFAULT_UNIT_MAX (((uint64_t)1 << DEFAULT_UNIT_SIZE) - 1)
+// #define DEFAULT_cell_SIZE (sizeof(cell_size_type) * 8)
+#define DEFAULT_CELL_SIZE 8 // Just for test.
+#define DEFAULT_CELL_MAX (((uint64_t)1 << DEFAULT_CELL_SIZE) - 1)
 
 #endif

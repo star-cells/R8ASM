@@ -33,7 +33,7 @@ rnz
 %macro unsafe_xor 3
 .anchor before_unsafe_xor
 
-%repeat _UNIT_SIZE
+%repeat _CELL_SIZE
     bit_unsafe_xor %1 %2 %3
     .tp %1
     ror

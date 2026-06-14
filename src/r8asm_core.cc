@@ -1,11 +1,11 @@
 #include "r8asm/r8asm_core.hh"
-unit_size_type UNIT_SIZE = DEFAULT_UNIT_SIZE;
+cell_size_type CELL_SIZE = DEFAULT_CELL_SIZE;
 mem_size_type dataptr = 0;
 
 std::map<std::string, r8asm_label> labels = {{std::string("main"), 0}};
 std::map<std::string, r8asm_data> datas = {
-    {std::string("_UNIT_MAX"), DEFAULT_UNIT_MAX},
-    {std::string{"_UNIT_SIZE"}, DEFAULT_UNIT_SIZE}};
+    {std::string("_CELL_MAX"), DEFAULT_CELL_MAX},
+    {std::string{"_CELL_SIZE"}, DEFAULT_CELL_SIZE}};
 
 std::map<std::string, R8MetaOp> r8asm_insmap = {
     {"stp", rot8_bytecode::STP},	{"btp", rot8_bytecode::BTP},

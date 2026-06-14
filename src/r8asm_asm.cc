@@ -20,7 +20,7 @@ r8asm_data read_opr(R8Operand arg,
 void expand_xor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     r8asm_data opr = read_opr(arg);
 
-    for (unit_size_type i = 0; i < UNIT_SIZE; i++) {
+    for (cell_size_type i = 0; i < CELL_SIZE; i++) {
 	if ((opr & 1) == 1)
 	    tape.push_back(rot8_bytecode::FLB);
 	tape.push_back(rot8_bytecode::ROR);
@@ -46,10 +46,10 @@ void expand_tp(std::vector<rot8_bytecode> &tape, R8Operand arg,
 	       bool count_offset = true) {
     r8asm_data opr = read_opr(arg);
 
-    unit_offset_type offset = (unit_offset_type)opr - (unit_offset_type)dataptr;
+    cell_offset_type offset = (cell_offset_type)opr - (cell_offset_type)dataptr;
     bool stepforward = (offset > 0);
     offset = abs(offset);
-    for (unit_offset_type i = 0; i < offset; i++) {
+    for (cell_offset_type i = 0; i < offset; i++) {
 	tape.push_back(stepforward ? rot8_bytecode::STP : rot8_bytecode::BTP);
     }
     if (count_offset)
@@ -68,7 +68,7 @@ void expand_erase(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     std::vector<rot8_bytecode> tmp = {rot8_bytecode::BIZ, rot8_bytecode::FLB,
 				      rot8_bytecode::RNZ,
 				      rot8_bytecode::ROR}; // [-]+
-    for (unit_size_type i = 0; i < UNIT_SIZE; i++)
+    for (cell_size_type i = 0; i < cell_SIZE; i++)
 	tape.insert(tape.end(), tmp.begin(), tmp.end());
     return;
 }*/
