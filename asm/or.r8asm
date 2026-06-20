@@ -69,9 +69,9 @@ bit_unsafe_or bit_or_buf_1 bit_or_buf_2 %3
 
 
 ;   Macro or
-;   %1:unit1
-;   %2:unit2
-;   %3:ans_unit
+;   %1: Unit arg1
+;   %2: Unit arg2
+;   %3: Unit ans
 %macro or 3
 .anchor before_or
 

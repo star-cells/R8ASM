@@ -67,9 +67,9 @@ bit_unsafe_and bit_and_buf_1 bit_and_buf_2 %3
 
 
 ;   Macro and
-;   %1:unit1
-;   %2:unit2
-;   %3:ans_unit
+;   %1: Unit arg1
+;   %2: Unit arg2
+;   %3: Unit ans
 %macro and 3
 .anchor before_and
 
