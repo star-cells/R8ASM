@@ -16,7 +16,7 @@ std::map<std::string, R8MetaOp> r8asm_parsemap = {
     {"%endmacro", r8asm_builtin::ENDMACRO},
     {"%repeat", r8asm_builtin::REPEAT},
     {"%endrepeat", r8asm_builtin::ENDREPEAT},
-		{"%include",r8asm_builtin::INCLUDE},//TODO:Expand include
+    {"%include", r8asm_builtin::INCLUDE}, // TODO:Expand include
 };
 
 void r8asm_trim(std::string &str) { // Clean empty chars in the string.
