@@ -12,11 +12,11 @@ macro参数的注释中出现Unit前缀时,即表示其指向的数据作为Unit
 >当然往奇数Cell中存数据本来就是不推荐的行为.如果要进行不太在意性能的计算,用封装好的,更安全的宏直接计算会更合适.\
 >除非你知道自己在做什么.
 
-### stp与btp在[]内,在%macro内和在%repeat内的守恒
+### stp与btp在[],%macro和%repeat内的守恒
 
 如果stp与btp在[]内数量相等,就可以假定[]中的部分不会对dataptr造成影响,也就可以实现dataptr在编译期的静态分析.\
 stp与btp的守恒使得dataptr的静态分析变得相当简单,也使anchor和tp——原本几乎不可能存在的随机访问——成为可能.\
-macro和repeat内同理,并且这样宏就不会破坏调用前的上下文.\
+macro和repeat内同理,并且这样宏就不会破坏调用前的上下文.
 >当然对macro,最方便的肯定是在开头anchor,末尾再tp回去.
 
 ## 全局常量
@@ -68,10 +68,10 @@ macro和repeat内同理,并且这样宏就不会破坏调用前的上下文.\
 
 ## 流程
 
-read_src(r8asm文件) => R8Src
-r8asm_preprocess(R8Src) => macros
-expand_macros(macros) => builtin
-r8asm_tape_out(builtin) => bytecode
+read_src(r8asm文件) => R8Src\
+r8asm_preprocess(R8Src) => macros\
+expand_macros(macros) => builtin\
+r8asm_tape_out(builtin) => bytecode\
 ROT8_BC_TO_CHAR(bytecode) => tape
 
 ## 示例
