@@ -1,7 +1,7 @@
 ;   Macro bit_unsafe_and
-;   %1: arg1
-;   %2: arg2
-;   %3: ans
+;   %1: CellBit arg1
+;   %2: CellBit arg2
+;   %3: CellBit ans
 %macro bit_unsafe_and 3
 .anchor before_bit_unsafe_and
 .tp %3
@@ -25,9 +25,9 @@ rnz
 
 
 ;   Macro unsafe_and
-;   %1: arg1
-;   %2: arg2
-;   %3: ans
+;   %1: Cell arg1
+;   %2: Cell arg2
+;   %3: Cell ans
 %macro unsafe_and 3
 .anchor before_unsafe_and
 
@@ -47,9 +47,9 @@ rnz
 
 
 ;   Macro bit_and
-;   %1: Unit arg1
-;   %2: Unit arg2
-;   %3: ans
+;   %1: UnitBit arg1
+;   %2: UnitBit arg2
+;   %3: CellBit ans
 %macro bit_and 3
 .anchor before_and
 .tp %1
@@ -69,7 +69,7 @@ bit_unsafe_and bit_and_buf_1 bit_and_buf_2 %3
 ;   Macro and
 ;   %1: Unit arg1
 ;   %2: Unit arg2
-;   %3: Unit ans
+;   %3: Cell ans
 %macro and 3
 .anchor before_and
 

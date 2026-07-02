@@ -1,9 +1,9 @@
 ;   Macro bit_add
-;   %1: Unit A
-;   %2: Unit B
-;   %3: Unit Ci
-;   %4: S
-;   %5: Co
+;   %1: UnitBit A
+;   %2: UnitBit B
+;   %3: UnitBit Ci
+;   %4: CellBit S
+;   %5: CellBit Co
 %macro bit_add 5
 .anchor before_bit_add
 
@@ -54,7 +54,7 @@ bit_move_to %4
 ;   %1: Unit A
 ;   %2: Unit B
 ;   %3: Unit Ci
-;   %4: S
+;   %4: Cell S
 ;   %5: Unit Co
 %macro add 5
 .anchor before_add

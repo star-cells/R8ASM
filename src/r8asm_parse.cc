@@ -30,7 +30,7 @@ void r8asm_trim(std::string &str) { // Clean empty chars in the string.
 	str = "";
 }
 
-std::string r8asm_peel(std::string &str) { // Peel a word from string.
+std::string r8asm_peel(std::string &str) { // Peel the first word from string.
     r8asm_trim(str);
     auto end = str.find_first_of(EMPTY_CHARS);
 
