@@ -1,3 +1,8 @@
+%include asm/lib.r8asm
+%include asm/and.r8asm
+%include asm/or.r8asm
+%include asm/xor.r8asm
+
 ;   Macro bit_add
 ;   %1: UnitBit A
 ;   %2: UnitBit B

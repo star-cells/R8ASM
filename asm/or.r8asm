@@ -1,3 +1,4 @@
+%include asm/lib.r8asm
 ;   Macro bit_unsafe_or
 ;   %1: CellBit arg1
 ;   %2: CellBit arg2

@@ -63,27 +63,15 @@ void expand_anchor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
 	datas.insert_or_assign(std::to_string(*name), dataptr);
 }
 
-/*
-void expand_erase(std::vector<rot8_bytecode> &tape, R8Operand arg) {
-    std::vector<rot8_bytecode> tmp = {rot8_bytecode::BIZ, rot8_bytecode::FLB,
-				      rot8_bytecode::RNZ,
-				      rot8_bytecode::ROR}; // [-]+
-    for (cell_size_type i = 0; i < cell_SIZE; i++)
-	tape.insert(tape.end(), tmp.begin(), tmp.end());
-    return;
-}*/
-
 void expand_bytecode(std::vector<rot8_bytecode> &tape, R8Operand arg,
-		     rot8_bytecode op, bool count_offset = true) {
+		     rot8_bytecode op) {
     r8asm_data repeat = read_opr(arg, 1);
     for (r8asm_data i = 0; i < repeat; i++) {
 	tape.push_back(op);
-	if (count_offset) {
-	    if (op == rot8_bytecode::STP)
-		dataptr++;
-	    else if (op == rot8_bytecode::BTP)
-		dataptr--;
-	}
+	if (op == rot8_bytecode::STP)
+	    dataptr++;
+	else if (op == rot8_bytecode::BTP)
+	    dataptr--;
     }
 }
 

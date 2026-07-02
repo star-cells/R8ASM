@@ -1,3 +1,4 @@
+%include asm/add.r8asm
 .xor 123
 
 .tp 2

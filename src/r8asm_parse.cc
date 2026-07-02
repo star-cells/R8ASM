@@ -11,12 +11,10 @@
 #include <utility>
 #include <vector>
 
-std::map<std::string, R8MetaOp> r8asm_parsemap = {
-    {"%macro", r8asm_builtin::MACRO},
-    {"%endmacro", r8asm_builtin::ENDMACRO},
-    {"%repeat", r8asm_builtin::REPEAT},
-    {"%endrepeat", r8asm_builtin::ENDREPEAT},
-    {"%include", r8asm_builtin::INCLUDE}, // TODO:Expand include
+std::unordered_map<r8asm_parse, std::string> r8asm_parsemap = {
+    {r8asm_parse::MACRO, "%macro"},	{r8asm_parse::ENDMACRO, "%endmacro"},
+    {r8asm_parse::REPEAT, "%repeat"},	{r8asm_parse::ENDREPEAT, "%endrepeat"},
+    {r8asm_parse::INCLUDE, "%include"}, {r8asm_parse::VAR, "%var"},
 };
 
 void r8asm_trim(std::string &str) { // Clean empty chars in the string.
@@ -66,7 +64,8 @@ R8Src read_src(std::string filename) {
 	    ins_buffer.push_back(r8asm_peel(line_buffer));
 	src.raw_src.push_back({ins_buffer});
 	if (ins_buffer[0][0] == '%') {
-	    if (ins_buffer[0].substr(1, 3) == "end") {
+	    if (ins_buffer[0] == r8asm_parsemap[r8asm_parse::ENDMACRO] ||
+		ins_buffer[0] == r8asm_parsemap[r8asm_parse::ENDREPEAT]) {
 		src.codeblocks.push(
 		    {matcher.top(), std::prev(src.raw_src.end())});
 		matcher.pop();
@@ -107,7 +106,25 @@ r8asm_translate_single_ins(std::vector<std::string> const raw_ins) {
     return (R8Instruction{});
 }
 
-void R8Src::preprocess() {
+void R8Src::preprocess_lines() {
+    R8Src tmp_src;
+    for (auto i = (this->raw_src).begin(); i != (this->raw_src).end();) {
+	auto tmp_i = i;
+	if ((*i)[0] == r8asm_parsemap[r8asm_parse::VAR]) {
+	    datas.insert_or_assign(
+		(*i)[1], std::get<r8asm_data>(r8asm_arg_stoi((*i)[1])));
+	    i = this->raw_src.erase(i);
+	} else if ((*i)[0] == r8asm_parsemap[r8asm_parse::INCLUDE]) {
+	    tmp_src = read_src((*i)[1]);
+	    tmp_src.preprocess_lines();
+	    tmp_src.preprocess_blocks();
+	    i = this->raw_src.erase(i);
+	} else
+	    ++i;
+    }
+}
+
+void R8Src::preprocess_blocks() {
     std::vector<R8Instruction> tmp_codeblock;
     while (!this->codeblocks.empty()) {
 	auto i = this->codeblocks.front();
@@ -122,12 +139,12 @@ void R8Src::preprocess() {
 	*/
 	for (auto j : raw_codeblock)
 	    tmp_codeblock.push_back(r8asm_translate_single_ins(j));
-	if ((*i.first)[0] == "%macro") {
+	if ((*i.first)[0] == r8asm_parsemap[r8asm_parse::MACRO]) {
 	    r8asm_macromap.insert_or_assign(
 		(*i.first)[1], R8Macro{(argc_type)std::get<r8asm_data>(
 					   r8asm_arg_stoi((*i.first)[2])),
 				       tmp_codeblock});
-	} else if ((*i.first)[0] == "%repeat") {
+	} else if ((*i.first)[0] == r8asm_parsemap[r8asm_parse::REPEAT]) {
 	    for (auto count =
 		     std::get<r8asm_data>(r8asm_arg_stoi((*i.first)[1]));
 		 count > 0; count--)
@@ -140,7 +157,9 @@ void R8Src::preprocess() {
 
 std::vector<R8Instruction> r8asm_preprocess(R8Src &src) {
     std::vector<R8Instruction> tmp_ins;
-    src.preprocess();
+
+    src.preprocess_lines();
+    src.preprocess_blocks();
     for (auto i : src.raw_src) {
 	tmp_ins.push_back(r8asm_translate_single_ins(i));
     }

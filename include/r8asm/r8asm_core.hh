@@ -33,11 +33,15 @@ enum class r8asm_builtin {
     XOR,
     ANCHOR,
     ERASE,
+};
+
+enum class r8asm_parse {
     MACRO,
     ENDMACRO,
     REPEAT,
     ENDREPEAT,
     INCLUDE,
+    VAR,
 };
 
 using R8Operand = std::variant<std::monostate, r8asm_data, std::string>;
@@ -47,7 +51,8 @@ struct r8asm_macrocall {
     std::vector<R8Operand> actual_args;
 };
 
-using R8MetaOp = std::variant<r8asm_builtin, r8asm_macrocall, rot8_bytecode>;
+using R8MetaOp =
+    std::variant<r8asm_builtin, r8asm_macrocall, rot8_bytecode, r8asm_parse>;
 
 struct R8Instruction {
     R8MetaOp op;
