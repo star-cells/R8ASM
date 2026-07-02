@@ -18,13 +18,13 @@ r8asm_data read_opr(R8Operand arg,
 }
 
 void expand_xor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
-    r8asm_data opr = read_opr(arg);
+    r8asm_data real_arg = read_opr(arg);
 
     for (cell_size_type i = 0; i < CELL_SIZE; i++) {
-	if ((opr & 1) == 1)
+	if ((real_arg & 1) == 1)
 	    tape.push_back(rot8_bytecode::FLB);
 	tape.push_back(rot8_bytecode::ROR);
-	opr >>= 1;
+	real_arg >>= 1;
     }
 }
 
