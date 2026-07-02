@@ -77,12 +77,12 @@ bit_unsafe_or bit_or_buf_1 bit_or_buf_2 %3
 
 .tp %1
 copy_to_buffer %3
-stp                     ;Before r8asm_arg_stoi suppports evaluating,it's a compromise.
-.anchor or_buf_1       ;
+stp
+.anchor or_buf_1
 .tp %2
 copy_to_buffer %3
-stp                     ;
-.anchor or_buf_2       ;
+stp
+.anchor or_buf_2
 unsafe_or or_buf_1 or_buf_2 ans
 .tp before_or
 %endmacro
