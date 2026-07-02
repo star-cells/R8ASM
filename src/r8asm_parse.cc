@@ -112,7 +112,7 @@ void R8Src::preprocess_lines() {
 	auto tmp_i = i;
 	if ((*i)[0] == r8asm_parsemap[r8asm_parse::VAR]) {
 	    datas.insert_or_assign(
-		(*i)[1], std::get<r8asm_data>(r8asm_arg_stoi((*i)[1])));
+		(*i)[1], std::get<r8asm_data>(r8asm_arg_stoi((*i)[2])));
 	    i = this->raw_src.erase(i);
 	} else if ((*i)[0] == r8asm_parsemap[r8asm_parse::INCLUDE]) {
 	    tmp_src = read_src((*i)[1]);
