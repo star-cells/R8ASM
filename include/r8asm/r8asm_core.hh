@@ -9,7 +9,7 @@
 
 typedef uint32_t r8asm_label;
 typedef int32_t r8asm_data;
-typedef uint32_t cell_size_type;
+typedef uint8_t cell_size_type;
 typedef int32_t cell_offset_type;
 typedef uint32_t mem_size_type;
 typedef uint32_t argc_type;
