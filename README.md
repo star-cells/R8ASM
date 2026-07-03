@@ -39,20 +39,22 @@ macro和repeat内同理,并且这样宏就不会破坏调用前的上下文.
 >.loop的示例:当*(dataptr++)为115(0b11010111)时,循环将进行3次.结束后该Cell将变为26(0b11010)\
 >因此这种可变的循环每层最多可执行_CELL_SIZE次
 
-## Macros
+## Parses
 
-| Macro | 含义 |
+| Parse | 含义 |
 | --- | --- |
 | %macro s1 s2 | 创建具有stoi(s2)个参数的,名为s1的宏. |
 | %endmacro | 结束对该宏的声明 |
 | %repeat s | 将该段代码重复插入stoi(s)次 |
 | %endrepeat | 结束重复的代码段 |
+| %include s | 将s作为依赖引入 |
+| %var s1 s2 | 创建值为stoi(s2)的,名为s1的变量 |
 
 > 在macro内,%0表示"当前宏的参数个数". 可以以%n的形式获取参数, n $ \in[ 1, $ stoi(s2) $ ] $
 
 ## 标准库
 
-各个宏的具体含义与用法在r8asm文件中基本都有提及,此处不做过多介绍.\
+各个宏的具体含义与用法在对应的r8asm文件中基本都有提及,此处不做过多介绍.\
 命名上的规则如下:
 
 | 前缀 | 含义 |
@@ -76,32 +78,39 @@ ROT8_BC_TO_CHAR(bytecode) => tape
 
 ## 示例
 
-可以用add宏计像这样计算123+23+1:
+可以用add宏计像这样计算255+255+1(在 _CELL_SIZE = 8时,结果为 Co = 1, S = 255)并验证其安全性:
 
 ```nasm
-.xor 123
+%include asm/add.r8asm
 
-.tp 2
-.xor 23
+%var A 0
+%var B 2
+%var Ci 4
+%var S 6
+%var Co 8
 
-.tp 4
-flb
+.tp A
+.xor 255
+.tp B
+.xor 255
+.tp Ci
+.xor 1
 
-add 0 2 4 6 8
+add A B Ci S Co
 
-.tp 0
+.tp A
 out
-.tp 2
+.tp B
 out
-.tp 4
+.tp Ci
 out
-.tp 6
+.tp S
 out
-.tp 8
+.tp Co
 out
 ```
 
->r8asm的语法极大程度上参考了nasm,因此这里用nasm的Markdown代码块蹭一下语法高亮
+>r8asm的语法很大程度上参考了nasm,因此这里用nasm的Markdown代码块蹭一下语法高亮
 
 ## 构建
 
@@ -115,11 +124,10 @@ make -j$(nproc)
 ## 用法
 
 ```sh
-  r8asm_test asm1 asm2 ...
+  r8asm_test asm
 ```
 
 ## TODO
 
-1. r8asm_parse.cc/r8asm_arg_stoi中对作为参数的表达式进行求值
-2. 像正经汇编一样的sections结构
-3. 各种边界检查/语法检查
+1. 像正经汇编一样的sections结构
+2. 各种边界检查/语法检查
