@@ -85,8 +85,5 @@ ror
 ror
 %endrepeat
 
-.tp add_buf_1
-bit_move_to %5
-
 .tp before_add
 %endmacro
