@@ -24,10 +24,22 @@ flb
 
 %macro erase 0
 %repeat _CELL_SIZE
-set_0
-ror
+    set_0
+    ror
 %endrepeat
 %endmacro
+
+
+%macro rol 0    ;Surprise.
+%repeat _ROL_STEP
+    ror
+%endrepeat
+%endmacro
+
+
+
+;   Macro bit_move_to
+;   %1: CellBit destination
 
 %macro bit_move_to 1
 .anchor before_bit_move_to
@@ -44,8 +56,8 @@ rnz
 %endmacro
 
 
-;   Macro bit_copy_to_buffer.
-;   %1: tmp
+;   Macro bit_copy_to_buffer
+;   %1: CellBit buffer
 
 %macro bit_copy_to_buffer 1
 .anchor before_bit_copy_to_buffer
@@ -64,19 +76,14 @@ biz
     .tp before_bit_copy_to_buffer
 rnz
 .tp %1
-biz
-    flb
-    .tp before_bit_copy_to_buffer
-    flb
-    .tp %1
-rnz
+bit_move_to before_bit_copy_to_buffer
 
 .tp before_bit_copy_to_buffer
 %endmacro
 
 
 
-;   Macro copy_to_buffer.
+;   Macro copy_to_buffer
 ;   %1: tmp
 
 %macro copy_to_buffer 1

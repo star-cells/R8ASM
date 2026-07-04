@@ -5,7 +5,8 @@ r8asm_mem_size rot8_dataptr = 0;
 std::map<std::string, r8asm_label> r8asm_labelmap = {{std::string("main"), 0}};
 std::map<std::string, r8asm_data> r8asm_datamap = {
     {std::string("_CELL_MAX"), DEFAULT_CELL_MAX},
-    {std::string{"_CELL_SIZE"}, DEFAULT_CELL_SIZE}};
+    {std::string{"_CELL_SIZE"}, DEFAULT_CELL_SIZE},
+    {std::string("_ROL_STEP"), DEFAULT_ROL_STEP}};
 
 std::map<std::string, R8MetaOp> r8asm_insmap = {
     {"stp", rot8_bytecode::STP},	{"btp", rot8_bytecode::BTP},

@@ -69,8 +69,10 @@ extern std::map<std::string, R8MetaOp> r8asm_insmap;
 
 extern r8asm_cell_size CELL_SIZE;
 #define CELL_MAX (((uint64_t)1 << CELL_SIZE) - 1)
+#define ROL_STEP (CELL_SIZE - 1)
 
 #define DEFAULT_CELL_SIZE 8 // Just for test.
 #define DEFAULT_CELL_MAX (((uint64_t)1 << DEFAULT_CELL_SIZE) - 1)
+#define DEFAULT_ROL_STEP (DEFAULT_CELL_SIZE - 1)
 
 #endif

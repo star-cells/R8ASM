@@ -1,0 +1,36 @@
+; TODO
+
+
+%include asm/lib.r8asm
+;   Macro inc
+
+%macro inc 0
+
+stp
+flb
+btp
+
+%repeat _CELL_SIZE
+
+    stp
+
+
+    biz
+        flb
+        btp
+        flb
+        stp
+        rol
+        flb
+        ror
+    rnz
+
+
+    out
+    ror
+    btp
+    out
+    ror
+%endrepeat
+
+%endmacro
