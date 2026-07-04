@@ -1,9 +1,9 @@
 #include "r8asm/r8asm_core.hh"
-cell_size_type CELL_SIZE = DEFAULT_CELL_SIZE;
-mem_size_type dataptr = 0;
+r8asm_cell_size CELL_SIZE = DEFAULT_CELL_SIZE;
+r8asm_mem_size rot8_dataptr = 0;
 
-std::map<std::string, r8asm_label> labels = {{std::string("main"), 0}};
-std::map<std::string, r8asm_data> datas = {
+std::map<std::string, r8asm_label> r8asm_labelmap = {{std::string("main"), 0}};
+std::map<std::string, r8asm_data> r8asm_datamap = {
     {std::string("_CELL_MAX"), DEFAULT_CELL_MAX},
     {std::string{"_CELL_SIZE"}, DEFAULT_CELL_SIZE}};
 

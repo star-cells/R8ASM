@@ -10,8 +10,8 @@ r8asm_data read_opr(R8Operand arg,
 {
     if (const std::string *operand = std::get_if<std::string>(&arg)) {
 	if ((*operand) == "$")
-	    return dataptr;
-	return (datas[*operand]);
+	    return rot8_dataptr;
+	return (r8asm_datamap[*operand]);
     } else if (const r8asm_data *operand = std::get_if<r8asm_data>(&arg))
 	return (*operand);
     return (default_opr);
@@ -20,7 +20,7 @@ r8asm_data read_opr(R8Operand arg,
 void expand_xor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     r8asm_data real_arg = read_opr(arg);
 
-    for (cell_size_type i = 0; i < CELL_SIZE; i++) {
+    for (r8asm_cell_size i = 0; i < CELL_SIZE; i++) {
 	if ((real_arg & 1) == 1)
 	    tape.push_back(rot8_bytecode::FLB);
 	tape.push_back(rot8_bytecode::ROR);
@@ -46,21 +46,22 @@ void expand_tp(std::vector<rot8_bytecode> &tape, R8Operand arg,
 	       bool count_offset = true) {
     r8asm_data opr = read_opr(arg);
 
-    cell_offset_type offset = (cell_offset_type)opr - (cell_offset_type)dataptr;
+    r8asm_cell_offset offset =
+	(r8asm_cell_offset)opr - (r8asm_cell_offset)rot8_dataptr;
     bool stepforward = (offset > 0);
     offset = abs(offset);
-    for (cell_offset_type i = 0; i < offset; i++) {
+    for (r8asm_cell_offset i = 0; i < offset; i++) {
 	tape.push_back(stepforward ? rot8_bytecode::STP : rot8_bytecode::BTP);
     }
     if (count_offset)
-	dataptr = opr;
+	rot8_dataptr = opr;
 }
 
 void expand_anchor(std::vector<rot8_bytecode> &tape, R8Operand arg) {
     if (const std::string *name = std::get_if<std::string>(&arg))
-	datas.insert_or_assign(*name, dataptr);
+	r8asm_datamap.insert_or_assign(*name, rot8_dataptr);
     else if (const r8asm_data *name = std::get_if<r8asm_data>(&arg))
-	datas.insert_or_assign(std::to_string(*name), dataptr);
+	r8asm_datamap.insert_or_assign(std::to_string(*name), rot8_dataptr);
 }
 
 void expand_bytecode(std::vector<rot8_bytecode> &tape, R8Operand arg,
@@ -69,9 +70,9 @@ void expand_bytecode(std::vector<rot8_bytecode> &tape, R8Operand arg,
     for (r8asm_data i = 0; i < repeat; i++) {
 	tape.push_back(op);
 	if (op == rot8_bytecode::STP)
-	    dataptr++;
+	    rot8_dataptr++;
 	else if (op == rot8_bytecode::BTP)
-	    dataptr--;
+	    rot8_dataptr--;
     }
 }
 

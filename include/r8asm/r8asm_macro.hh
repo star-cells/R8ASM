@@ -4,14 +4,14 @@
 #include "r8asm/r8asm_core.hh"
 #include <vector>
 struct R8Macro {
-    argc_type argc = 0;
+    r8asm_argc argc = 0;
     std::vector<R8Instruction> ins;
 };
 extern std::map<std::string, R8Macro> r8asm_macromap;
 
-std::vector<R8Instruction> expand_single_macro(std::string macro_name,
-    std::vector<R8Operand> argv);
+std::vector<R8Instruction>
+r8asm_expand_single_macro(std::string macro_name, std::vector<R8Operand> argv);
 
-std::vector<R8Instruction> expand_macros(std::vector<R8Instruction> ins);
+std::vector<R8Instruction> r8asm_expand_macros(std::vector<R8Instruction> ins);
 
 #endif

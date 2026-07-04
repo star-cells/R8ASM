@@ -20,7 +20,7 @@ struct R8Src {
     void preprocess_lines();
 };
 
-R8Src read_src(std::string filename);
+R8Src r8asm_read_src(std::string filename);
 std::vector<R8Instruction> r8asm_preprocess(R8Src &src);
 extern std::unordered_map<r8asm_parse, std::string> r8asm_parsemap;
 

@@ -5,7 +5,7 @@
 std::map<std::string, R8Macro> r8asm_macromap;
 
 R8Operand read_arg(std::vector<R8Operand> &actual_args, R8Operand formal_para,
-		   argc_type argc) {
+		   r8asm_argc argc) {
     if (std::string *str = std::get_if<std::string>(&formal_para)) {
 	if ((*str) == "%0")
 	    return ((r8asm_data)argc);
@@ -17,8 +17,8 @@ R8Operand read_arg(std::vector<R8Operand> &actual_args, R8Operand formal_para,
 }
 
 std::vector<R8Instruction>
-expand_single_macro(std::string macro_name,
-		    std::vector<R8Operand> actual_args) {
+r8asm_expand_single_macro(std::string macro_name,
+			  std::vector<R8Operand> actual_args) {
     std::vector<R8Instruction> tmp_tape;
     R8Macro this_macro = r8asm_macromap[macro_name];
 
@@ -33,7 +33,7 @@ expand_single_macro(std::string macro_name,
 	    for (auto j : tmp_macro->actual_args)
 		macro_args.push_back(read_arg(actual_args, j, this_macro.argc));
 	    std::vector<R8Instruction> macro_body =
-		expand_single_macro(tmp_macro->name, macro_args);
+		r8asm_expand_single_macro(tmp_macro->name, macro_args);
 	    tmp_tape.insert(tmp_tape.end(), macro_body.begin(),
 			    macro_body.end());
 	}
@@ -42,12 +42,12 @@ expand_single_macro(std::string macro_name,
     return (tmp_tape);
 }
 
-std::vector<R8Instruction> expand_macros(std::vector<R8Instruction> ins) {
+std::vector<R8Instruction> r8asm_expand_macros(std::vector<R8Instruction> ins) {
     std::vector<R8Instruction> tape;
     for (auto i : ins) {
 	if (r8asm_macrocall *tmp_macro = std::get_if<r8asm_macrocall>(&i.op)) {
-	    std::vector<R8Instruction> tmp_tape =
-		(expand_single_macro(tmp_macro->name, tmp_macro->actual_args));
+	    std::vector<R8Instruction> tmp_tape = (r8asm_expand_single_macro(
+		tmp_macro->name, tmp_macro->actual_args));
 	    tape.insert(tape.end(), tmp_tape.begin(), tmp_tape.end());
 	} else
 	    tape.push_back(i);

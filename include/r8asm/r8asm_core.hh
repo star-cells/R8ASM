@@ -7,12 +7,13 @@
 #include <variant>
 #include <vector>
 
-typedef uint32_t r8asm_label;
-typedef int32_t r8asm_data;
-typedef uint8_t cell_size_type;
-typedef int32_t cell_offset_type;
-typedef uint32_t mem_size_type;
-typedef uint32_t argc_type;
+using r8asm_label = uint32_t;
+using r8asm_cell_size = uint8_t;
+using r8asm_cell_offset = int32_t;
+using r8asm_mem_size = uint32_t;
+using r8asm_argc = r8asm_mem_size;
+
+using r8asm_data = int32_t;
 
 #define ROT8_BC_TO_CHAR(bc) ("><+-[].,"[static_cast<int>(bc)])
 
@@ -59,16 +60,16 @@ struct R8Instruction {
     R8Operand formal_para;
 };
 
-extern std::map<std::string, r8asm_label> labels;
-extern std::map<std::string, r8asm_data> datas;
-extern mem_size_type dataptr;
+extern std::map<std::string, r8asm_label>
+    r8asm_labelmap; // TODO:sections support
+extern std::map<std::string, r8asm_data> r8asm_datamap;
+extern r8asm_mem_size rot8_dataptr;
 
 extern std::map<std::string, R8MetaOp> r8asm_insmap;
 
-extern cell_size_type CELL_SIZE;
+extern r8asm_cell_size CELL_SIZE;
 #define CELL_MAX (((uint64_t)1 << CELL_SIZE) - 1)
 
-// #define DEFAULT_cell_SIZE (sizeof(cell_size_type) * 8)
 #define DEFAULT_CELL_SIZE 8 // Just for test.
 #define DEFAULT_CELL_MAX (((uint64_t)1 << DEFAULT_CELL_SIZE) - 1)
 

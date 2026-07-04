@@ -44,7 +44,7 @@ std::string r8asm_peel(std::string &str) { // Peel the first word from string.
     }
 }
 
-R8Src read_src(std::string filename) {
+R8Src r8asm_read_src(std::string filename) {
     R8Src src;
 
     std::ifstream ifile;
@@ -82,8 +82,8 @@ R8Operand r8asm_arg_stoi(std::string raw_arg) { // TODO:expression evaluating
 	r8asm_data arg = std::stoi(raw_arg);
 	return (arg);
     } catch (std::invalid_argument) {
-	if (datas.find(raw_arg) != datas.end())
-	    return (datas[raw_arg]);
+	if (r8asm_datamap.find(raw_arg) != r8asm_datamap.end())
+	    return (r8asm_datamap[raw_arg]);
 	return (raw_arg);
     }
 }
@@ -111,11 +111,11 @@ void R8Src::preprocess_lines() {
     for (auto i = (this->raw_src).begin(); i != (this->raw_src).end();) {
 	auto tmp_i = i;
 	if ((*i)[0] == r8asm_parsemap[r8asm_parse::VAR]) {
-	    datas.insert_or_assign(
+	    r8asm_datamap.insert_or_assign(
 		(*i)[1], std::get<r8asm_data>(r8asm_arg_stoi((*i)[2])));
 	    i = this->raw_src.erase(i);
 	} else if ((*i)[0] == r8asm_parsemap[r8asm_parse::INCLUDE]) {
-	    tmp_src = read_src((*i)[1]);
+	    tmp_src = r8asm_read_src((*i)[1]);
 	    tmp_src.preprocess_lines();
 	    tmp_src.preprocess_blocks();
 	    i = this->raw_src.erase(i);
@@ -141,7 +141,7 @@ void R8Src::preprocess_blocks() {
 	    tmp_codeblock.push_back(r8asm_translate_single_ins(j));
 	if ((*i.first)[0] == r8asm_parsemap[r8asm_parse::MACRO]) {
 	    r8asm_macromap.insert_or_assign(
-		(*i.first)[1], R8Macro{(argc_type)std::get<r8asm_data>(
+		(*i.first)[1], R8Macro{(r8asm_argc)std::get<r8asm_data>(
 					   r8asm_arg_stoi((*i.first)[2])),
 				       tmp_codeblock});
 	} else if ((*i.first)[0] == r8asm_parsemap[r8asm_parse::REPEAT]) {
